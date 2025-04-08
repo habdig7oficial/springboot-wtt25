@@ -26,7 +26,7 @@ The provided directions are suposing that you are developing in a Debian Linux e
 
 ### Setup Java development environment (Debian)
 
-- [Setup Debian environment in Windows 11 using WSL](https://mackcloud.mackenzie.br/gitlab/tutorial/tutorials/-/blob/main/UsingDebianLinuxOnWindows.md?ref_type=heads)
+- [Setup Debian environment in Windows 11 using WSL](https://mackcloud.mackenzie.br/gitlab/learning/mackleaps/tutorials/-/blob/main/UsingDebianLinuxOnWindows.md)
 - [Setup Java development environment in Debian Linux](https://mackcloud.mackenzie.br/gitlab/tutorial/tutorials/-/blob/main/SettingUpDebianBoxForJavaDevelopment.md?ref_type=heads)
 
 ### Setup Java development environment (Windows)
