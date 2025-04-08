@@ -24,10 +24,13 @@ Finally it is explained how this project source code and resources may be copied
 To make it easy for you to get started with Java development here's a list of recommended next steps.
 The provided directions are suposing that you are developing in a Debian Linux environment, with Java Development Kit installed and configured using Maven dependency management.
 
-### Setup Java development environment
+### Setup Java development environment (Debian)
 
 - [Setup Debian environment in Windows 11 using WSL](https://mackcloud.mackenzie.br/gitlab/tutorial/tutorials/-/blob/main/UsingDebianLinuxOnWindows.md?ref_type=heads)
 - [Setup Java development environment in Debian Linux](https://mackcloud.mackenzie.br/gitlab/tutorial/tutorials/-/blob/main/SettingUpDebianBoxForJavaDevelopment.md?ref_type=heads)
+
+### Setup Java development environment (Windows)
+- [Setup of a Portable version of the GIT Client](https://mackcloud.mackenzie.br/gitlab/learning/mackleaps/tutorials/-/blob/main/Windows-PortableGitClient.md)
 
 
 ### Setup Integrated Development Environment for Java
