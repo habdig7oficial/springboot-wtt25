@@ -15,7 +15,7 @@ Finally it is explained how this project source code and resources may be copied
 ## Prerequisite
 
 - You must have credentials to access this GitLAB repository (if you are reading this README file probably you already have accomplished with this prerequisite).
-- You must have configured your token to access this repository from your linux box using the command line. If you do not have your personal access token, see [this tutorial](https://mackcloud.mackenzie.br/gitlab/tutorial/tutorials/-/blob/main/gitlab/AccessTokenGitLab.md?ref_type=heads).
+- You must have configured your token to access this repository from your linux box using the command line. If you do not have your personal access token, see [this tutorial](https://mackcloud.mackenzie.br/gitlab/learning/mackleaps/tutorials/-/blob/main/GitLAB-Personal_Token.md).
 
 
 
