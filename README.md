@@ -1,10 +1,15 @@
 # REST-API
 
 This project is the starting point to the implementation of a RESTful API (Application Programing Interface) in Java using the Spring Boot framework.
+
 In this README file we will set the development environment and test it.
+
 At first a Debian Linux environment must be provided. For linux users this is not a challenging taks, but for Windows 11 users, this can be a whole new world to be explored. Therefore, we provide a tutorial to setup a Debian Linux environment in Windows 11, using the Windows Subsystem for Linux (WSL).
+
 After setting up a Debian Linux for use, the Java development tools must be installed. The second tutorial explains how to set the Java Development Kit and the Maven dependency management tool.
+
 With all the tools set for Java compilation and execution, a third tutorial explains how to setup a Integrated Development Environment to develop in Java.
+
 Finally it is explained how this project source code and resources may be copied to your computer (cloned), compiled and executed.
 
 ## Prerequisite
@@ -80,7 +85,7 @@ If you list the contents of the workspace directory you will notice that a new d
 Navigate to the project directory
 
 ```bash
-cd asset-api
+cd rest-api
 ```
 
 Check if the file pom.xml is in the directory
