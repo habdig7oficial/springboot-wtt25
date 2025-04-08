@@ -31,6 +31,10 @@ The provided directions are suposing that you are developing in a Debian Linux e
 
 ### Setup Java development environment (Windows)
 - [Setup of a Portable version of the GIT Client](https://mackcloud.mackenzie.br/gitlab/learning/mackleaps/tutorials/-/blob/main/Windows-PortableGitClient.md)
+- [Install SSL intermediate certificates from mackenzie.br in Windows](https://mackcloud.mackenzie.br/gitlab/learning/mackleaps/tutorials/-/blob/main/MackenzieCERTS.md)
+- [Install Java Development Kit in Windows]()
+- [Install Maven in Windows]()
+
 
 
 ### Setup Integrated Development Environment for Java
