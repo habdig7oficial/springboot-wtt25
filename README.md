@@ -1,21 +1,16 @@
-# REST-API
+# Asset REST API
 
 This project is the starting point to the implementation of a RESTful API (Application Programing Interface) in Java using the Spring Boot framework.
-
 In this README file we will set the development environment and test it.
-
 At first a Debian Linux environment must be provided. For linux users this is not a challenging taks, but for Windows 11 users, this can be a whole new world to be explored. Therefore, we provide a tutorial to setup a Debian Linux environment in Windows 11, using the Windows Subsystem for Linux (WSL).
-
 After setting up a Debian Linux for use, the Java development tools must be installed. The second tutorial explains how to set the Java Development Kit and the Maven dependency management tool.
-
 With all the tools set for Java compilation and execution, a third tutorial explains how to setup a Integrated Development Environment to develop in Java.
-
 Finally it is explained how this project source code and resources may be copied to your computer (cloned), compiled and executed.
 
 ## Prerequisite
 
 - You must have credentials to access this GitLAB repository (if you are reading this README file probably you already have accomplished with this prerequisite).
-- You must have configured your token to access this repository from your linux box using the command line. If you do not have your personal access token, see [this tutorial](https://mackcloud.mackenzie.br/gitlab/learning/mackleaps/tutorials/-/blob/main/GitLAB-Personal_Token.md).
+- You must have configured your token to access this repository from your linux box using the command line. If you do not have your personal access token, see [this tutorial](https://mackcloud.mackenzie.br/gitlab/tutorial/tutorials/-/blob/main/gitlab/AccessTokenGitLab.md?ref_type=heads).
 
 
 
@@ -24,17 +19,10 @@ Finally it is explained how this project source code and resources may be copied
 To make it easy for you to get started with Java development here's a list of recommended next steps.
 The provided directions are suposing that you are developing in a Debian Linux environment, with Java Development Kit installed and configured using Maven dependency management.
 
-### Setup Java development environment (Debian)
+### Setup Java development environment
 
-- [Setup Debian environment in Windows 11 using WSL](https://mackcloud.mackenzie.br/gitlab/learning/mackleaps/tutorials/-/blob/main/UsingDebianLinuxOnWindows.md)
-- [Setup Java development environment in Debian Linux](https://mackcloud.mackenzie.br/gitlab/learning/mackleaps/tutorials/-/blob/main/SettingUpDebianBoxForJavaDevelopment.md)
-
-### Setup Java development environment (Windows)
-- [Setup of a Portable version of the GIT Client](https://mackcloud.mackenzie.br/gitlab/learning/mackleaps/tutorials/-/blob/main/Windows-PortableGitClient.md)
-- [Install SSL intermediate certificates from mackenzie.br in Windows](https://mackcloud.mackenzie.br/gitlab/learning/mackleaps/tutorials/-/blob/main/MackenzieCERTS.md)
-- [Install Java Development Kit in Windows]()
-- [Install Maven in Windows]()
-
+- [Setup Debian environment in Windows 11 using WSL](https://mackcloud.mackenzie.br/gitlab/tutorial/tutorials/-/blob/main/java/SettingUpDebianBoxForJavaDevelopment.md?ref_type=heads)
+- [Setup Java development environment in Debian Linux](https://mackcloud.mackenzie.br/gitlab/tutorial/tutorials/-/blob/main/java/SettingUpDebianBoxForJavaDevelopment.md?ref_type=heads)
 
 
 ### Setup Integrated Development Environment for Java
@@ -82,17 +70,17 @@ ls
 To create a local copy of the project repository in your workspace execute the following command. Be aware that you will be requested to provide your credentials (username and your personal access token).
 
 ```bash
-git clone https://mackcloud.mackenzie.br/gitlab/learning/mackleaps/rest-api.git
+git clone https://mackcloud.mackenzie.br/gitlab/digital-internship/asset-rest-api.git
 ```
 
-If you list the contents of the workspace directory you will notice that a new directory rest-api was created.
+If you list the contents of the workspace directory you will notice that a new directory asset-api was created.
 
 ### Test cloned project
 
 Navigate to the project directory
 
 ```bash
-cd rest-api
+cd asset-api
 ```
 
 Check if the file pom.xml is in the directory
@@ -109,13 +97,17 @@ Check dependencies
 mvn clean
 ```
 
+```bash
+mvn install
+```
+
 Run the project
 
 ```bash
-mvn spring-boot:Run
+mvn spring-boot:run
 ```
 
-This command will build and execute the rest-api application.
+This command will build and execute the asset-api application.
 
 To test the application run your browser and open the following URL:
 
@@ -124,3 +116,14 @@ http://localhost:8080
 ```
 
 For now a HTTP 404 error message will be given, as we have not implemented any REST method.
+
+
+### Order of Implementation  
+
+The implementation instructions are spread across different files. Follow the steps in the order below:  
+
+1. [HTTP_GET.md](./HTTP_GET.md)
+2. [HTTP_POST.md](./HTTP_POST.md)
+3. [HTTP_PUT.md](./HTTP_PUT.md)
+4. [HTTP_DELETE.md](./HTTP_DELETE.md) 
+
