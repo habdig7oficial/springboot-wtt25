@@ -73,6 +73,8 @@ The response will be:
 If you want to try, you can compile and run the following java class:
 
 ```java
+package br.mackenzie.mackleaps;
+
 import java.io.*;
 import java.net.*;
 
@@ -113,8 +115,9 @@ public class SimpleHttpClient {
 
 ```
 
-
 The expected output is:
+
+```
 
 >Request sent:
 GET /assets HTTP/1.1
@@ -135,3 +138,5 @@ Connection: close
 
 
 Now we will implement the [HTTP POST Method](https://mackcloud.mackenzie.br/gitlab/digital-internship/asset-rest-api/-/blob/main/HTTP_POST.md?ref_type=heads).
+
+```
