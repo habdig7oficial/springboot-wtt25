@@ -13,7 +13,6 @@ GET /assets HTTP/1.1
 Host: localhost
 Accept:text/html,application/json,application/xml
 Connection:Close
-
 ```
 
 To implement the response for this request, in **src/main/java/br/mackenzie/mackleaps/assetapi** folder create a file called _AssetController.java_ with the content:
@@ -113,12 +112,11 @@ public class SimpleHttpClient {
     }
 }
 
-```
 
+```
 The expected output is:
 
 ```
-
 >Request sent:
 GET /assets HTTP/1.1
 Host: localhost
@@ -135,6 +133,7 @@ Connection: close
 >19
 ["Asset one","Asset two"]
 0
+```
 
 
 Now we will implement the [HTTP POST Method](https://mackcloud.mackenzie.br/gitlab/digital-internship/asset-rest-api/-/blob/main/HTTP_POST.md?ref_type=heads).
