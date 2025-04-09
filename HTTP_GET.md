@@ -19,7 +19,7 @@ Connection:Close
 To implement the response for this request, in **src/main/java/br/mackenzie/mackleaps/assetapi** folder create a file called _AssetController.java_ with the content:
 
 ```java
-package br.mackenzie.mackleaps.assetapi;
+package br.mackenzie.mackleaps.api;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.*;

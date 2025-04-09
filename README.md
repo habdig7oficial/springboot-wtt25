@@ -70,7 +70,7 @@ ls
 To create a local copy of the project repository in your workspace execute the following command. Be aware that you will be requested to provide your credentials (username and your personal access token).
 
 ```bash
-git clone https://mackcloud.mackenzie.br/gitlab/digital-internship/asset-rest-api.git
+git clone https://mackcloud.mackenzie.br/gitlab/learning/mackleaps/rest-api.git
 ```
 
 If you list the contents of the workspace directory you will notice that a new directory asset-api was created.

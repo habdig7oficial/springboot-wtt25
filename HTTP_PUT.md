@@ -17,7 +17,7 @@ Connection:Close
 To implement the response for this request, in **src/main/java/br/mackenzie/mackleaps/assetapi** folder add the following method to the file called _AssetController.java_ :
 
 ```java
-package br.mackenzie.mackleaps.assetapi;
+package br.mackenzie.mackleaps.api;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.*;
@@ -70,6 +70,8 @@ Asset asset two updated to Asset duo.
 If you want to try, you can compile and run the following java class:
 
 ```java
+package br.mackenzie.mackleaps;
+
 import java.io.*;
 import java.net.*;
 
