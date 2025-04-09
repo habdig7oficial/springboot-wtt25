@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.mackenzie.mackleaps</groupId>
-	<artifactId>asset-api</artifactId>
+	<artifactId>rest-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>asset-api</name>
-	<description>Asset Rest API</description>
+	<name>rest-api</name>
+	<description>Rest API</description>
 	<url/>
 	<licenses>
 		<license/>
