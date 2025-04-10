@@ -2,13 +2,13 @@
 
 HTTP DELETE method is used to delete a resource.
 
-In this case, we are implementing the DELETE method for the resource **asset**
+In this case, we are implementing the DELETE method for the resource **franchises**
 
-Below a simple example of a DELETE HTTP request for the /assets resource is sent to the localhost server.
+Below a simple example of a DELETE HTTP request for the /franchises resource is sent to the localhost server.
 
 ```
 Request sent:
-DELETE /assets/{assetid} HTTP/1.1
+DELETE /franchises/{franchisesid} HTTP/1.1
 Host: host
 Accept:text/html,application/json,application/xml
 Content-type: application/text
@@ -16,7 +16,7 @@ Connection:Close
 
 ```
 
-To implement the response for this request, in **src/main/java/br/mackenzie/mackleaps/assetapi** folder add the following method to thefile called _AssetController.java_ :
+To implement the response for this request, in **src/main/java/br/mackenzie/mackleaps/franchises** folder add the following method to thefile called _FranchisesController.java_ :
 
 ```java
 package br.mackenzie.mackleaps.api;
@@ -50,8 +50,8 @@ public class AssetController {
 }
 ```
 
-In this code we are mapping the method deleteAsset to the DELETE HTTP verb when the resouce /assets/{assetname} is requested.
-Note that the deleteAsset method returns a message informing that the asset was deleted.
+In this code we are mapping the method deleteFranchises to the DELETE HTTP verb when the resouce /franchises/{franchisesname} is requested.
+Note that the deleteFranchises method returns a message informing that the franchises was deleted.
 
 Save the file and to compile and run, in the command line, execute the command:
 
@@ -64,14 +64,14 @@ We may test the HTTP DELETE Method implemented using the curl app.
 In the terminal of the wsl execute the command:
 
 ```bash
-curl --header "Content-Type: application/text" --request DELETE --data 'Asset due' http://localhost:8080/assets/asset%20two
+curl --header "Content-Type: application/text" --request DELETE --data 'Franchise due' http://localhost:8080/franchises/franchise%20two
  
 ```
 
 The response will be:
 
 ```bash
-Asset asset two deleted.
+Franchises Franchises two deleted.
 ```
 
 If you want to try, you can compile and run the following java class:
@@ -239,7 +239,7 @@ The expected output is:
 Exec: sendGETHttpRequest
 
 Request sent:
-GET /assets HTTP/1.1
+GET /franchises HTTP/1.1
 Host: localhost
 Accept:text/html,application/json,application/xml
 Connection:Close
@@ -253,21 +253,21 @@ Date: Fri, 14 Feb 2025 16:40:30 GMT
 Connection: close
 
 19
-["Asset one","Asset two"]
+["Franchise one","Franchise two"]
 0
 
 
 Exec: sendPOSTHttpRequest
 
 Request sent:
-POST /assets HTTP/1.1
+POST /franchises HTTP/1.1
 Host: localhost
 Accept:text/html,application/json,application/xml
 Content-type: application/x-www-form-urlencoded
 Content-length: 11
 Connection:Close
 
-asset three
+franchises three
 
 Waiting for respponse.
 HTTP/1.1 200
@@ -276,20 +276,20 @@ Content-Length: 27
 Date: Fri, 14 Feb 2025 16:40:30 GMT
 Connection: close
 
-Asset asset three created.
+Franchise Franchise three created.
 
 
 Exec: sendPUTHttpRequest
 
 Request sent:
-PUT /assets/asset%20two HTTP/1.1
+PUT /franchises/franchise%20two HTTP/1.1
 Host: localhost
 Accept:text/html,application/json,application/xml
 Content-type: application/text
 Content-length: 9
 Connection:Close
 
-asset due
+franchise due
 
 Waiting for respponse.
 HTTP/1.1 200
@@ -298,12 +298,12 @@ Content-Length: 36
 Date: Tue, 18 Feb 2025 15:55:40 GMT
 Connection: close
 
-Asset asset two updated to asset due
+Franchise franchise two updated to franchise due
 
 Exec: sendDELETEHttpRequest
 
 Request sent:
-DELETE /assets/asset%20two HTTP/1.1
+DELETE /franchises/franchise%20two HTTP/1.1
 Host: localhost
 Accept:text/html,application/json,application/xml
 Content-type: application/text
@@ -317,6 +317,6 @@ Content-Length: 24
 Date: Wed, 19 Feb 2025 15:41:37 GMT
 Connection: close
 
-Asset asset two deleted.
+Franchise franchise two deleted.
 
 ```
