@@ -1,29 +1,34 @@
 package br.mackenzie.mackleaps.api.entity;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Arrays;
 
 public class StarWars {
+    // Utiliza uma lista mutável para armazenar os personagens
+    private static final List<String> characters = new ArrayList<>();
 
-    // Lista de personagens da franquia Star Wars
-    private static final List<String> CHARACTERS = Arrays.asList(
-        "Obi-Wan Kenobi", 
-        "Qui-Gon Jinn", 
-        "Anakin Skywalker", 
-        "Mace Windu", 
-        "Yoda", 
-        "Kit Fisto", 
-        "Luminara Unduli", 
-        "Ki-Adi-Mundi", 
-        "Shaak Ti", 
-        "Plo Koon", 
-        "Eeth Koth", 
-        "Yarael Poof", 
-        "Saesee Tiin", 
-        "Luke Skywalker"
-    );
+    static {
+        characters.add("Luke Skywalker");
+        characters.add("Leia Organa");
+        characters.add("Han Solo");
+        characters.add("Rey");
+        characters.add("Finn");
+        characters.add("Poe Dameron");
+        characters.add("Kylo Ren");
+        characters.add("BB-8");
+        characters.add("C-3PO");
+        characters.add("R2-D2");
+        characters.add("Obi-Wan Kenobi");
+        characters.add("Yoda");
+        characters.add("Darth Vader");
+        characters.add("Emperor Palpatine");
+    }
     
     public static List<String> getCharacters() {
-        return CHARACTERS;
+        return characters;
+    }
+
+    public static void addCharacter(String character) {
+        characters.add(character);
     }
 }
