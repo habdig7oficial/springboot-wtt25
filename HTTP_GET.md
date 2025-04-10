@@ -19,13 +19,13 @@ Connection: close
 To handle this request, create (or update) the `FranchisesController` class in:
 
 ```
-src/main/java/br/mackenzie/mackleaps/assetapi/FranchisesController.java
+src/main/java/br/mackenzie/mackleaps/api/controller/FranchisesController.java
 ```
 
 with the following content:
 
 ```java
-package br.mackenzie.mackleaps.assetapi;
+package br.mackenzie.mackleaps.api.controlle;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -61,6 +61,10 @@ This method maps `GET /franchises/{domain}`, checks the `domain` path variable, 
 ### Running the Application
 
 To compile and run the application, use the following Maven command:
+
+```bash
+mvn clean install
+```
 
 ```bash
 mvn spring-boot:run
