@@ -1,262 +1,171 @@
-# Implement PUT method
+## Implementing the PUT Method
 
-HTTP PUT method is used to update a resource.
+The HTTP `PUT` method is used to update a resource on the server.
 
-In this case, we are implementing the PUT method for the resource **franchise**
+In this case, we are implementing the `PUT` method for the resource **asset** under the `/franchises/{domain}` endpoint.
 
-Below a simple example of a PUT HTTP request for the /franchises resource is sent to the localhost server.
+Below is a simple example of an HTTP `PUT` request sent to update a character in the `starwars` franchise on the local server:
 
-```
-PUT /franchises HTTP/1.1
+```http
+Request sent:
+PUT /franchises/starwars HTTP/1.1
 Host: localhost
-Accept:text/html,application/json,application/xml
-Connection:Close
+Accept: text/html,application/json,application/xml
+Content-Type: application/json
+Connection: close
 
+["Anakin Skywalker", "Darth Vader"]
 ```
 
-To implement the response for this request, in **src/main/java/br/mackenzie/mackleaps/franchises** folder add the following method to the file called _FranchisesController.java_ :
+### Controller Implementation
+
+To handle this request, add the following method to the `FranchisesController` class located in:
+
+```
+src/main/java/br/mackenzie/mackleaps/assetapi/FranchisesController.java
+```
 
 ```java
-package br.mackenzie.mackleaps.api;
+@PutMapping("/{domain}")
+public ResponseEntity<String> updateAsset(
+        @PathVariable String domain,
+        @RequestBody List<String> data) {
 
-import java.util.List;
-import org.springframework.web.bind.annotation.*;
+    String oldName = data.get(0);
+    String newName = data.get(1);
+    List<String> characters;
 
-@RequestMapping("/assets")
-@RestController
-public class AssetController {
-    
-    @GetMapping
-    public List<String> listAssets(){
-        return List.of("Asset one", "Asset two");
+    if ("starwars".equalsIgnoreCase(domain)) {
+        characters = StarWars.getCharacters();
+    } else if ("marvel".equalsIgnoreCase(domain)) {
+        characters = Marvel.getCharacters();
+    } else {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body("Franchise not found.");
     }
 
-    @PostMapping
-    public String createAsset(@RequestBody String name){
-        return "Asset " + name + " created.";
+    int index = characters.indexOf(oldName);
+    if (index == -1) {
+        String msg = String.format(
+            "Character '%s' was not found in the '%s' franchise.",
+            oldName, domain);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(msg);
     }
 
-    @PutMapping("/{name}")
-    public String updateAsset(@PathVariable String name, @RequestBody String newName){
-        return "Asset " + name + " updated to " + newName;
-    }
+    characters.set(index, newName);
+    String msg = String.format(
+        "Character '%s' was successfully updated to '%s' in the '%s' franchise.",
+        oldName, newName, domain);
+    return ResponseEntity
+            .ok(msg);
 }
 ```
 
-In this code we are mapping the method updateFranchises to the PUT HTTP verb when the resouce /franchises/{franchisesname} is requested.
-Note that the updateFranchise method returns a message informing that the franchise was renamed.
+This method maps `PUT /franchises/{domain}`, reads a JSON array containing two elements (`[oldName, newName]`), updates the specified character, and returns a message indicating success or failure.
 
-Save the file and to compile and run, in the command line, execute the command:
+---
+
+### Running the Application
+
+To compile and run the application, use the following Maven command:
 
 ```bash
 mvn spring-boot:run
 ```
 
-We may test the HTTP PUT Method implemented using the curl app.
+---
 
-In the terminal of the wsl execute the command:
+### Testing with `curl`
 
-```bash
-curl --header "Content-Type: application/text" --request PUT --data 'Franchise due' http://localhost:8080/franchises/franchise%20two
- 
-```
-
-The response will be:
+You can test the `PUT` method using `curl`. Execute this command in your terminal:
 
 ```bash
-Franchise franchise two updated to Franchise duo.
+curl --header "Content-Type: application/json" \
+     --request PUT \
+     --data '["Anakin Skywalker","Darth Vader"]' \
+     http://localhost:8080/franchises/starwars
 ```
 
-If you want to try, you can compile and run the following java class:
+Expected response:
+
+```
+Character 'Anakin Skywalker' was successfully updated to 'Darth Vader' in the 'starwars' franchise.
+```
+
+---
+
+### Optional: Testing with a Java Client
+
+To test programmatically, you can use the `sendPUTHttpRequest` method in the provided `SimpleHttpClient` Java class:
 
 ```java
-package br.mackenzie.mackleaps;
+private static void sendPUTHttpRequest(
+        String host, int port, String resource, String jsonData) {
 
-import java.io.*;
-import java.net.*;
+    try (Socket socket = new Socket(host, port)) {
+        String request = "PUT " + resource + " HTTP/1.1\n"
+            + "Host: " + host + "\n"
+            + "Accept: text/html,application/json,application/xml\n"
+            + "Content-Type: application/json\n"
+            + "Content-Length: " + jsonData.length() + "\n"
+            + "Connection: close\n\n"
+            + jsonData + "\n";
 
-public class SimpleHttpClient {
+        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+        System.out.println("Request sent:");
+        System.out.println(request);
+        out.println(request);
 
-
-    private static void sendGETHttpRequest(String host, int port, String resource){
-
-        try (Socket socket = new Socket(host, port)) {
-
-            //build HTTP GET Request
-            String getRequest = "GET " + resource + " HTTP/1.1\n";
-            getRequest = getRequest + "Host: " + host + "\n";
-            getRequest = getRequest + "Accept:text/html,application/json,application/xml\n";
-            getRequest = getRequest + "Connection:Close\n";
-            getRequest = getRequest + "\n"; //indicate end of request header.
-
-            // Send HTTP GET request
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            System.out.println("Request sent:");
-            System.out.println(getRequest);
-            out.println(getRequest);
-
-            // Read the response
-            System.out.println("Waiting for respponse.");
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String line;
-            while ((line = in.readLine()) != null) {
-                System.out.println(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        BufferedReader in = new BufferedReader(
+            new InputStreamReader(socket.getInputStream()));
+        String line;
+        System.out.println("Waiting for response...");
+        while ((line = in.readLine()) != null) {
+            System.out.println(line);
         }
+    } catch (IOException e) {
+        e.printStackTrace();
     }
-
-
-    private static void sendPOSTHttpRequest(String host, int port, String resource, String data){
-
-        try (Socket socket = new Socket(host, port)) {
-
-            //build HTTP POST Request
-            String request = "POST " + resource + " HTTP/1.1\n";
-            request = request + "Host: " + host + "\n";
-            request = request + "Accept:text/html,application/json,application/xml\n";
-            request = request + "Content-type: application/text\n";
-            request = request + "Content-length: " + data.length() + "\n";
-            request = request + "Connection:Close\n";
-            request = request + "\n"; //indicate end of request header.
-            request = request + data + "\n";
-
-            // Send HTTP POST request
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            System.out.println("Request sent:");
-            System.out.println(request);
-            out.println(request);
-			// Read the response
-            System.out.println("Waiting for respponse.");
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String line;
-            while ((line = in.readLine()) != null) {
-                System.out.println(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-        private static void sendPUTHttpRequest(String host, int port, String resource, String data){
-
-        try (Socket socket = new Socket(host, port)) {
-
-            //build HTTP PUT Request
-            String request = "PUT " + resource + " HTTP/1.1\n";
-            request = request + "Host: " + host + "\n";
-            request = request + "Accept:text/html,application/json,application/xml\n";
-            request = request + "Content-type: application/text\n";
-            request = request + "Content-length: " + data.length() + "\n";
-            request = request + "Connection:Close\n";
-            request = request + "\n"; //indicate end of request header.
-            request = request + data + "\n";
-
-            // Send HTTP PUT request
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            System.out.println("Request sent:");
-            System.out.println(request);
-            out.println(request);
-
-            // Read the response
-            System.out.println("Waiting for respponse.");
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String line;
-            while ((line = in.readLine()) != null) {
-                System.out.println(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
-    public static void main(String[] args) {
-        String host = "localhost";
-        int port = 8080;
-        String path = "/assets";
-
-        System.out.println("\nExec: sendGETHttpRequest\n");
-        sendGETHttpRequest(host,port,path);
-        System.out.println("\nExec: sendPOSTHttpRequest\n");
-        sendPOSTHttpRequest(host,port,path,"asset three");
-        System.out.println("\nExec: sendPUTHttpRequest\n");
-        sendPUTHttpRequest(host,port,path+"/asset%20two","asset due");
-
-    }
-}     
+}
 ```
 
+Add a call to this method in your `main`:
 
-The expected output is:
+```java
+public static void main(String[] args) {
+    String host = "localhost";
+    int port = 8080;
+    String resource = "/franchises/starwars";
+    String data = "[\"Anakin Skywalker\",\"Darth Vader\"]";
+
+    System.out.println("\nExec: sendPUTHttpRequest\n");
+    sendPUTHttpRequest(host, port, resource, data);
+}
+```
+
+Expected console output:
 
 ```
-Exec: sendGETHttpRequest
-
-Request sent:
-GET /franchises HTTP/1.1
-Host: localhost
-Accept:text/html,application/json,application/xml
-Connection:Close
-
-
-Waiting for respponse.
-HTTP/1.1 200
-Content-Type: application/json
-Transfer-Encoding: chunked
-Date: Fri, 14 Feb 2025 16:40:30 GMT
-Connection: close
-
-19
-["Franchise one","Franchise two"]
-0
-
-
-Exec: sendPOSTHttpRequest
-
-Request sent:
-POST /franchises HTTP/1.1
-Host: localhost
-Accept:text/html,application/json,application/xml
-Content-type: application/x-www-form-urlencoded
-Content-length: 11
-Connection:Close
-
-franchise three
-
-Waiting for respponse.
-HTTP/1.1 200
-Content-Type: text/html;charset=UTF-8
-Content-Length: 27
-Date: Fri, 14 Feb 2025 16:40:30 GMT
-Connection: close
-
-Franchise franchise three created.
-
-
 Exec: sendPUTHttpRequest
 
 Request sent:
-PUT /franchises/franchise%20two HTTP/1.1
+PUT /franchises/starwars HTTP/1.1
 Host: localhost
-Accept:text/html,application/json,application/xml
-Content-type: application/text
-Content-length: 9
-Connection:Close
-
-franchise due
-
-Waiting for respponse.
-HTTP/1.1 200
-Content-Type: text/html;charset=UTF-8
-Content-Length: 36
-Date: Tue, 18 Feb 2025 15:55:40 GMT
+Accept: text/html,application/json,application/xml
+Content-Type: application/json
+Content-Length:  forty-some
 Connection: close
 
-Franchise franchise two updated to franchise due
+["Anakin Skywalker","Darth Vader"]
+
+Waiting for response...
+HTTP/1.1 200
+Content-Type: text/plain;charset=UTF-8
+Content-Length:  seventy-some
+Connection: close
+
+Character 'Anakin Skywalker' was successfully updated to 'Darth Vader' in the 'starwars' franchise.
 ```

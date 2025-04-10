@@ -1,322 +1,119 @@
-# Implement DELETE method
 
-HTTP DELETE method is used to delete a resource.
+## Implementing the DELETE Method
 
-In this case, we are implementing the DELETE method for the resource **franchises**
+The HTTP `DELETE` method is used to remove a resource from the server.
 
-Below a simple example of a DELETE HTTP request for the /franchises resource is sent to the localhost server.
+In this case, we are implementing the DELETE method for the resource **character**.
 
-```
+Below is a simple example of an HTTP DELETE request sent to the `/franchises` endpoint on the local server:
+
+```http
 Request sent:
-DELETE /franchises/{franchisesid} HTTP/1.1
-Host: host
-Accept:text/html,application/json,application/xml
-Content-type: application/text
-Connection:Close
+DELETE /franchises/marvel HTTP/1.1
+Host: localhost
+Accept: text/html,application/json,application/xml
+Content-Type: text/plain
+Connection: close
 
+Thor
 ```
 
-To implement the response for this request, in **src/main/java/br/mackenzie/mackleaps/franchises** folder add the following method to thefile called _FranchisesController.java_ :
+### Controller Implementation
+
+To handle this request, add the following method to the `FranchisesController` class located in:
+
+```
+src/main/java/br/mackenzie/mackleaps/assetapi/FranchisesController.java
+```
 
 ```java
-package br.mackenzie.mackleaps.api;
+@DeleteMapping("/{domain}")
+public String deleteCharacter(@PathVariable String domain, @RequestBody String character) {
+    List<String> characters;
 
-import java.util.List;
-import org.springframework.web.bind.annotation.*;
-
-@RequestMapping("/assets")
-@RestController
-public class AssetController {
-    
-    @GetMapping
-    public List<String> listAssets(){
-        return List.of("Asset one", "Asset two");
+    if ("starwars".equalsIgnoreCase(domain)) {
+        characters = StarWars.getCharacters();
+    } else if ("marvel".equalsIgnoreCase(domain)) {
+        characters = Marvel.getCharacters();
+    } else {
+        return "Franchise not found.";
     }
 
-    @PostMapping
-    public String createAsset(@RequestBody String name){
-        return "Asset " + name + " created.";
-    }
-
-    @PutMapping("/{name}")
-    public String updateAsset(@PathVariable String name, @RequestBody String newName){
-        return "Asset " + name + " updated to " + newName;
-    }
-
-    @DeleteMapping("/{name}")
-    public String deleteAsset(@PathVariable String name){
-        return "Asset " + name + " deleted.";
+    if (characters.remove(character)) {
+        return String.format("Character '%s' was successfully removed from the '%s' franchise.", character, domain);
+    } else {
+        return String.format("Character '%s' was not found in the '%s' franchise.", character, domain);
     }
 }
 ```
 
-In this code we are mapping the method deleteFranchises to the DELETE HTTP verb when the resouce /franchises/{franchisesname} is requested.
-Note that the deleteFranchises method returns a message informing that the franchises was deleted.
+This method handles the `DELETE` request mapped to `/franchises/{domain}` and removes the given character from the respective franchise. It returns a message indicating whether the deletion was successful or not.
 
-Save the file and to compile and run, in the command line, execute the command:
+---
+
+### Running the Application
+
+To compile and run the application, use the following Maven command:
 
 ```bash
 mvn spring-boot:run
 ```
 
-We may test the HTTP DELETE Method implemented using the curl app.
+---
 
-In the terminal of the wsl execute the command:
+### Testing with `curl`
 
-```bash
-curl --header "Content-Type: application/text" --request DELETE --data 'Franchise due' http://localhost:8080/franchises/franchise%20two
- 
-```
-
-The response will be:
+You can test the DELETE method using `curl`. Execute this command in your WSL or terminal:
 
 ```bash
-Franchises Franchises two deleted.
+curl --header "Content-Type: text/plain" \
+     --request DELETE \
+     --data 'Thor' \
+     http://localhost:8080/franchises/marvel
 ```
 
-If you want to try, you can compile and run the following java class:
+Expected response:
+
+```
+Character 'Thor' was successfully removed from the 'marvel' franchise.
+```
+
+---
+
+### Optional: Testing with a Java Client
+
+To test it programmatically, you can use the `sendDELETEHttpRequest` method in the provided `SimpleHttpClient` Java class:
 
 ```java
-package br.mackenzie.mackleaps;
+private static void sendDELETEHttpRequest(String host, int port, String resource) {
+    try (Socket socket = new Socket(host, port)) {
+        String request = "DELETE " + resource + " HTTP/1.1\n";
+        request += "Host: " + host + "\n";
+        request += "Accept: text/html,application/json,application/xml\n";
+        request += "Content-Type: text/plain\n";
+        request += "Connection: close\n\n";
+        request += "Thor\n";
 
-import java.io.*;
-import java.net.*;
+        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+        System.out.println("Request sent:");
+        System.out.println(request);
+        out.println(request);
 
-public class SimpleHttpClient {
-
-
-    private static void sendGETHttpRequest(String host, int port, String resource){
-
-        try (Socket socket = new Socket(host, port)) {
-
-            //build HTTP GET Request
-            String getRequest = "GET " + resource + " HTTP/1.1\n";
-            getRequest = getRequest + "Host: " + host + "\n";
-            getRequest = getRequest + "Accept:text/html,application/json,application/xml\n";
-            getRequest = getRequest + "Connection:Close\n";
-            getRequest = getRequest + "\n"; //indicate end of request header.
-
-            // Send HTTP GET request
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            System.out.println("Request sent:");
-            System.out.println(getRequest);
-            out.println(getRequest);
-
-            // Read the response
-            System.out.println("Waiting for respponse.");
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String line;
-            while ((line = in.readLine()) != null) {
-                System.out.println(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        String line;
+        System.out.println("Waiting for response...");
+        while ((line = in.readLine()) != null) {
+            System.out.println(line);
         }
-    }
-
-
-    private static void sendPOSTHttpRequest(String host, int port, String resource, String data){
-
-        try (Socket socket = new Socket(host, port)) {
-
-            //build HTTP POST Request
-            String request = "POST " + resource + " HTTP/1.1\n";
-            request = request + "Host: " + host + "\n";
-            request = request + "Accept:text/html,application/json,application/xml\n";
-            request = request + "Content-type: application/text\n";
-            request = request + "Content-length: " + data.length() + "\n";
-            request = request + "Connection:Close\n";
-            request = request + "\n"; //indicate end of request header.
-            request = request + data + "\n";
-
-            // Send HTTP POST request
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            System.out.println("Request sent:");
-            System.out.println(request);
-            out.println(request);
-			// Read the response
-            System.out.println("Waiting for respponse.");
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String line;
-            while ((line = in.readLine()) != null) {
-                System.out.println(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-        private static void sendPUTHttpRequest(String host, int port, String resource, String data){
-
-        try (Socket socket = new Socket(host, port)) {
-
-            //build HTTP PUT Request
-            String request = "PUT " + resource + " HTTP/1.1\n";
-            request = request + "Host: " + host + "\n";
-            request = request + "Accept:text/html,application/json,application/xml\n";
-            request = request + "Content-type: application/text\n";
-            request = request + "Content-length: " + data.length() + "\n";
-            request = request + "Connection:Close\n";
-            request = request + "\n"; //indicate end of request header.
-            request = request + data + "\n";
-
-            // Send HTTP PUT request
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            System.out.println("Request sent:");
-            System.out.println(request);
-            out.println(request);
-
-            // Read the response
-            System.out.println("Waiting for respponse.");
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String line;
-            while ((line = in.readLine()) != null) {
-                System.out.println(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
-    private static void sendDELETEHttpRequest(String host, int port, String resource){
-
-        try (Socket socket = new Socket(host, port)) {
-
-            //build HTTP DELETE Request
-            String request = "DELETE " + resource + " HTTP/1.1\n";
-            request = request + "Host: " + host + "\n";
-            request = request + "Accept:text/html,application/json,application/xml\n";
-            request = request + "Content-type: application/text\n";
-            request = request + "Connection:Close\n";
-            request = request + "\n"; //indicate end of request header.
-
-            // Send HTTP DELETE request
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            System.out.println("Request sent:");
-            System.out.println(request);
-            out.println(request);
-
-            // Read the response
-            System.out.println("Waiting for respponse.");
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String line;
-            while ((line = in.readLine()) != null) {
-                System.out.println(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) {
-        String host = "localhost";
-        int port = 8080;
-        String path = "/assets";
-
-        System.out.println("\nExec: sendGETHttpRequest\n");
-        sendGETHttpRequest(host,port,path);
-        System.out.println("\nExec: sendPOSTHttpRequest\n");
-        sendPOSTHttpRequest(host,port,path,"asset three");
-        System.out.println("\nExec: sendPUTHttpRequest\n");
-        sendPUTHttpRequest(host,port,path+"/asset%20two","asset due");
-        System.out.println("\nExec: sendDELETEHttpRequest\n");
-        sendDELETEHttpRequest(host,port,path+"/asset%20two");
-
+    } catch (IOException e) {
+        e.printStackTrace();
     }
 }
 ```
 
+Add a call to this method in your `main`:
 
-The expected output is:
-
-```
-Exec: sendGETHttpRequest
-
-Request sent:
-GET /franchises HTTP/1.1
-Host: localhost
-Accept:text/html,application/json,application/xml
-Connection:Close
-
-
-Waiting for respponse.
-HTTP/1.1 200
-Content-Type: application/json
-Transfer-Encoding: chunked
-Date: Fri, 14 Feb 2025 16:40:30 GMT
-Connection: close
-
-19
-["Franchise one","Franchise two"]
-0
-
-
-Exec: sendPOSTHttpRequest
-
-Request sent:
-POST /franchises HTTP/1.1
-Host: localhost
-Accept:text/html,application/json,application/xml
-Content-type: application/x-www-form-urlencoded
-Content-length: 11
-Connection:Close
-
-franchises three
-
-Waiting for respponse.
-HTTP/1.1 200
-Content-Type: text/html;charset=UTF-8
-Content-Length: 27
-Date: Fri, 14 Feb 2025 16:40:30 GMT
-Connection: close
-
-Franchise Franchise three created.
-
-
-Exec: sendPUTHttpRequest
-
-Request sent:
-PUT /franchises/franchise%20two HTTP/1.1
-Host: localhost
-Accept:text/html,application/json,application/xml
-Content-type: application/text
-Content-length: 9
-Connection:Close
-
-franchise due
-
-Waiting for respponse.
-HTTP/1.1 200
-Content-Type: text/html;charset=UTF-8
-Content-Length: 36
-Date: Tue, 18 Feb 2025 15:55:40 GMT
-Connection: close
-
-Franchise franchise two updated to franchise due
-
-Exec: sendDELETEHttpRequest
-
-Request sent:
-DELETE /franchises/franchise%20two HTTP/1.1
-Host: localhost
-Accept:text/html,application/json,application/xml
-Content-type: application/text
-Connection:Close
-
-
-Waiting for respponse.
-HTTP/1.1 200
-Content-Type: text/html;charset=UTF-8
-Content-Length: 24
-Date: Wed, 19 Feb 2025 15:41:37 GMT
-Connection: close
-
-Franchise franchise two deleted.
-
+```java
+System.out.println("\nExec: sendDELETEHttpRequest\n");
+sendDELETEHttpRequest("localhost", 8080, "/franchises/marvel");
 ```
