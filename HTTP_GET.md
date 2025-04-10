@@ -1,38 +1,45 @@
-# Implement the GET methods
+## Implementing the GET Method
 
-HTTP GET method is used to retrieve information about a given resource.
+The HTTP `GET` method is used to retrieve information about a given resource on the server.
 
-In this case, we are implementing the GET method for the resource **/assets**
+In this case, we are implementing the `GET` method for the resource **asset** under the `/franchises/{domain}` endpoint.
 
-If an HTTP GET request is sent to the service, we should receive a response with a list of assets.
+Below is a simple example of an HTTP `GET` request sent to list all characters in the `starwars` franchise on the local server:
 
-Below a simple example of an GET HTTP request for the /assets resource is sent to the localhost server.
-
-```
-GET /assets HTTP/1.1
+```http
+Request sent:
+GET /franchises/starwars HTTP/1.1
 Host: localhost
-Accept:text/html,application/json,application/xml
-Connection:Close
+Accept: text/html,application/json,application/xml
+Connection: close
 ```
 
-To implement the response for this request, in **src/main/java/br/mackenzie/mackleaps/assetapi** folder create a file called _FranchisesController_.java_ with the content:
+### Controller Implementation
+
+To handle this request, create (or update) the `FranchisesController` class in:
+
+```
+src/main/java/br/mackenzie/mackleaps/assetapi/FranchisesController.java
+```
+
+with the following content:
 
 ```java
-package br.mackenzie.mackleaps.api.controller;
+package br.mackenzie.mackleaps.assetapi;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import br.mackenzie.mackleaps.api.entity.Marvel;
 import br.mackenzie.mackleaps.api.entity.StarWars;
+import br.mackenzie.mackleaps.api.entity.Marvel;
 
 import java.util.List;
 import java.util.Arrays;
 
 @RequestMapping("/franchises")
 @RestController
-public class PersonaController {
+public class FranchisesController {
 
     @GetMapping("/{domain}")
     public List<String> listAssets(@PathVariable String domain) {
@@ -41,50 +48,48 @@ public class PersonaController {
         } else if ("marvel".equalsIgnoreCase(domain)) {
             return Marvel.getCharacters();
         } else {
-            return Arrays.asList("Asset default para domínio desconhecido");
+            return Arrays.asList("Asset default for unknown domain");
         }
     }
 }
-
-}
 ```
 
-In this code we are mapping the method listAssets to the GET HTTP verb when the resoucer /assets is requested.
-Note that the listAssets method returns a list o two assets.
+This method maps `GET /franchises/{domain}`, checks the `domain` path variable, and returns the corresponding list of characters (or a default message if the domain is unrecognized).
 
-Save the file and to compile and run, in the command line, execute the command:
+---
+
+### Running the Application
+
+To compile and run the application, use the following Maven command:
 
 ```bash
 mvn spring-boot:run
 ```
 
-Access the service opening the following URL in your browser:
+---
+
+### Testing with `curl`
+
+You can test the `GET` method using `curl`. Execute this command in your terminal:
 
 ```bash
-http://localhost:8080/personas/{F}
+curl --header "Accept: application/json" \
+     http://localhost:8080/franchises/starwars
 ```
 
-In the browser, the response for this GET request should be:
+Expected response:
 
-```bash
-["Asset one","Asset two"]
+```json
+["Luke Skywalker","Darth Vader", ...]
 ```
 
-We may also test the HTTP GET Method implemented using the curl app.
+(or whatever characters are currently in the `StarWars` list).
 
-In the terminal of the wsl execute the command:
+---
 
-```bash
-curl http://localhost:8080/assets
-```
+### Optional: Testing with a Java Client
 
-The response will be:
-
-```bash
-["Asset one","Asset two"]
-```
-
-If you want to try, you can compile and run the following java class:
+To test programmatically, you can use the following `SimpleHttpClient` class:
 
 ```java
 package br.mackenzie.mackleaps;
@@ -96,16 +101,14 @@ public class SimpleHttpClient {
     public static void main(String[] args) {
         String host = "localhost";
         int port = 8080;
-        String path = "/franchises/starwars";
+        String resource = "/franchises/starwars";
 
         try (Socket socket = new Socket(host, port)) {
-
-            //build HTTP GET Request
-            String getRequest = "GET " + path + " HTTP/1.1\n";
-            getRequest = getRequest + "Host: " + host + "\n";
-            getRequest = getRequest + "Accept:text/html,application/json,application/xml\n";
-            getRequest = getRequest + "Connection:Close\n";
-            getRequest = getRequest + "\n"; //indicate end of request header.
+            // Build HTTP GET Request
+            String getRequest = "GET " + resource + " HTTP/1.1\n"
+                + "Host: " + host + "\n"
+                + "Accept: text/html,application/json,application/xml\n"
+                + "Connection: close\n\n";
 
             // Send HTTP GET request
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
@@ -114,9 +117,9 @@ public class SimpleHttpClient {
             out.println(getRequest);
 
             // Read the response
-            System.out.println("Waiting for respponse.");
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            System.out.println("Waiting for response...");
+            BufferedReader in = new BufferedReader(
+                new InputStreamReader(socket.getInputStream()));
             String line;
             while ((line = in.readLine()) != null) {
                 System.out.println(line);
@@ -126,31 +129,24 @@ public class SimpleHttpClient {
         }
     }
 }
+```
 
+Compile and run this class after starting your Spring Boot application.  
+
+Expected console output:
 
 ```
-The expected output is:
-
-```
->Request sent:
-GET /assets HTTP/1.1
+Request sent:
+GET /franchises/starwars HTTP/1.1
 Host: localhost
-Accept:text/html,application/json,application/xml
-Connection:Close
->
->Waiting for respponse.
-HTTP/1.1 200
-Content-Type: application/json
-Transfer-Encoding: chunked
-Date: Thu, 13 Feb 2025 20:04:24 GMT
+Accept: text/html,application/json,application/xml
 Connection: close
->
->19
-["Asset one","Asset two"]
-0
-```
 
+Waiting for response...
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length:  40
+Connection: close
 
-Now we will implement the [HTTP POST Method](https://mackcloud.mackenzie.br/gitlab/digital-internship/asset-rest-api/-/blob/main/HTTP_POST.md?ref_type=heads).
-
+["Luke Skywalker","Darth Vader"]
 ```
