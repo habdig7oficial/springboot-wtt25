@@ -16,22 +16,37 @@ Connection:Close
 
 ```
 
-To implement the response for this request, in **src/main/java/br/mackenzie/mackleaps/assetapi** folder create a file called _AssetController.java_ with the content:
+To implement the response for this request, in **src/main/java/br/mackenzie/mackleaps/assetapi** folder create a file called _FranchisesController_.java_ with the content:
 
 ```java
-package br.mackenzie.mackleaps.api;
+package br.mackenzie.mackleaps.api.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import br.mackenzie.mackleaps.api.entity.Marvel;
+import br.mackenzie.mackleaps.api.entity.StarWars;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.*;
+import java.util.Arrays;
 
-@RequestMapping("/assets")
+@RequestMapping("/franchises")
 @RestController
-public class AssetController {
-    
-    @GetMapping
-    public List<String> listAssets(){
-        return List.of("Asset one", "Asset two");
+public class PersonaController {
+
+    @GetMapping("/{domain}")
+    public List<String> listAssets(@PathVariable String domain) {
+        if ("starwars".equalsIgnoreCase(domain)) {
+            return StarWars.getCharacters();
+        } else if ("marvel".equalsIgnoreCase(domain)) {
+            return Marvel.getCharacters();
+        } else {
+            return Arrays.asList("Asset default para domínio desconhecido");
+        }
     }
+}
+
 }
 ```
 
@@ -47,7 +62,7 @@ mvn spring-boot:run
 Access the service opening the following URL in your browser:
 
 ```bash
-http://localhost:8080/assets
+http://localhost:8080/personas/{F}
 ```
 
 In the browser, the response for this GET request should be:
@@ -82,7 +97,7 @@ public class SimpleHttpClient {
     public static void main(String[] args) {
         String host = "localhost";
         int port = 8080;
-        String path = "/assets";
+        String path = "/franchises/starwars";
 
         try (Socket socket = new Socket(host, port)) {
 
