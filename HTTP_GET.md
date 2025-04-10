@@ -2,20 +2,20 @@
 
 HTTP GET method is used to retrieve information about a given resource.
 
-In this case, we are implementing the GET method for the resource **/assets**
+In this case, we are implementing the GET method for the resource **/franchises**
 
-If an HTTP GET request is sent to the service, we should receive a response with a list of assets.
+If an HTTP GET request is sent to the service, we should receive a response with a list of Franchises.
 
-Below a simple example of an GET HTTP request for the /assets resource is sent to the localhost server.
+Below a simple example of an GET HTTP request for the /franchises resource is sent to the localhost server.
 
 ```
-GET /assets HTTP/1.1
+GET /franchises HTTP/1.1
 Host: localhost
 Accept:text/html,application/json,application/xml
 Connection:Close
 ```
 
-To implement the response for this request, in **src/main/java/br/mackenzie/mackleaps/assetapi** folder create a file called _FranchisesController_.java_ with the content:
+To implement the response for this request, in **src/main/java/br/mackenzie/mackleaps/franchises** folder create a file called _FranchisesController.java_ with the content:
 
 ```java
 package br.mackenzie.mackleaps.api.controller;
@@ -49,8 +49,8 @@ public class PersonaController {
 }
 ```
 
-In this code we are mapping the method listAssets to the GET HTTP verb when the resoucer /assets is requested.
-Note that the listAssets method returns a list o two assets.
+In this code we are mapping the method listFranchises to the GET HTTP verb when the resoucer /franchises is requested.
+Note that the listFranchises method returns a list o two franchises.
 
 Save the file and to compile and run, in the command line, execute the command:
 
@@ -67,7 +67,7 @@ http://localhost:8080/personas/{F}
 In the browser, the response for this GET request should be:
 
 ```bash
-["Asset one","Asset two"]
+["Franchises","Franchises two"]
 ```
 
 We may also test the HTTP GET Method implemented using the curl app.
@@ -75,13 +75,13 @@ We may also test the HTTP GET Method implemented using the curl app.
 In the terminal of the wsl execute the command:
 
 ```bash
-curl http://localhost:8080/assets
+curl http://localhost:8080/franchises
 ```
 
 The response will be:
 
 ```bash
-["Asset one","Asset two"]
+["Franchises one","Franchises two"]
 ```
 
 If you want to try, you can compile and run the following java class:
@@ -133,7 +133,7 @@ The expected output is:
 
 ```
 >Request sent:
-GET /assets HTTP/1.1
+GET /franchises HTTP/1.1
 Host: localhost
 Accept:text/html,application/json,application/xml
 Connection:Close
@@ -146,7 +146,7 @@ Date: Thu, 13 Feb 2025 20:04:24 GMT
 Connection: close
 >
 >19
-["Asset one","Asset two"]
+["Franchises one","Franchises two"]
 0
 ```
 

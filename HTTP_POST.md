@@ -2,21 +2,21 @@
 
 HTTP POST method is used to create a new resource.
 
-In this case, we are implementing the POST method for the resource **asset**
+In this case, we are implementing the POST method for the resource **franchises**
 
-If an HTTP GET request is sent to the service, we should receive a response with a list of assets.
+If an HTTP GET request is sent to the service, we should receive a response with a list of franchises.
 
-Below a simple example of a POST HTTP request for the /assets resource is sent to the localhost server.
+Below a simple example of a POST HTTP request for the /franchises resource is sent to the localhost server.
 
 ```
-POST /assets HTTP/1.1
+POST /franchises HTTP/1.1
 Host: localhost
 Accept:text/html,application/json,application/xml
 Connection:Close
 
 ```
 
-To implement the response for this request, in **src/main/java/br/mackenzie/mackleaps/assetapi** folder add the following method to thefile called _AssetController.java_ :
+To implement the response for this request, in **src/main/java/br/mackenzie/mackleaps/franchises** folder add the following method to thefile called _FranchisesController.java_ :
 
 ```java
 package br.mackenzie.mackleaps.api.controller;
@@ -70,8 +70,8 @@ public class FranchisesController {
 }
 ```
 
-In this code we are mapping the method createAsset to the POST HTTP verb when the resouce /assets is requested.
-Note that the createAsset method returns a message informing that the asset was created.
+In this code we are mapping the method createFranchise to the POST HTTP verb when the resouce /franchises is requested.
+Note that the createFranchise method returns a message informing that the franchise was created.
 
 Save the file and to compile and run, in the command line, execute the command:
 
@@ -188,7 +188,7 @@ The expected output is:
 Exec: sendGETHttpRequest
 
 Request sent:
-GET /assets HTTP/1.1
+GET /franchises HTTP/1.1
 Host: localhost
 Accept:text/html,application/json,application/xml
 Connection:Close
@@ -202,21 +202,21 @@ Date: Fri, 14 Feb 2025 16:40:30 GMT
 Connection: close
 
 19
-["Asset one","Asset two"]
+["Franchise one","Franchise two"]
 0
 
 
 Exec: sendPOSTHttpRequest
 
 Request sent:
-POST /assets HTTP/1.1
+POST /franchises HTTP/1.1
 Host: localhost
 Accept:text/html,application/json,application/xml
 Content-type: application/x-www-form-urlencoded
 Content-length: 11
 Connection:Close
 
-asset three
+franchise three
 
 Waiting for respponse.
 HTTP/1.1 200
@@ -225,5 +225,5 @@ Content-Length: 27
 Date: Fri, 14 Feb 2025 16:40:30 GMT
 Connection: close
 
-Asset asset three created.
+Franchise franchise three created.
 ```
