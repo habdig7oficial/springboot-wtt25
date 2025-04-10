@@ -17,30 +17,82 @@ Connection:Close
 To implement the response for this request, in **src/main/java/br/mackenzie/mackleaps/assetapi** folder add the following method to the file called _AssetController.java_ :
 
 ```java
-package br.mackenzie.mackleaps.api;
+package br.mackenzie.mackleaps.api.controller;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import br.mackenzie.mackleaps.api.entity.Marvel;
+import br.mackenzie.mackleaps.api.entity.StarWars;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.*;
+import java.util.Arrays;
 
-@RequestMapping("/assets")
+@RequestMapping("/franchises")
 @RestController
-public class AssetController {
+public class FranchisesController {
+
+    @GetMapping("/{domain}")
+    public List<String> listAssets(@PathVariable String domain) {
+        if ("starwars".equalsIgnoreCase(domain)) {
+            return StarWars.getCharacters();
+        } else if ("marvel".equalsIgnoreCase(domain)) {
+            return Marvel.getCharacters();
+        } else {
+            return Arrays.asList("Asset default para domínio desconhecido");
+        }
+    }
     
-    @GetMapping
-    public List<String> listAssets(){
-        return List.of("Asset one", "Asset two");
+    @PostMapping("/{domain}")
+    public ResponseEntity<String> addAsset(@PathVariable String domain, @RequestBody String asset) {
+        String message;
+        if ("starwars".equalsIgnoreCase(domain)) {
+            StarWars.addCharacter(asset);
+            message = String.format("Character '%s' was successfully created in the '%s' franchise.\n", asset, "Star Wars");
+            return ResponseEntity.status(HttpStatus.CREATED).body(message);
+        } else if ("marvel".equalsIgnoreCase(domain)) {
+            Marvel.addCharacter(asset);
+            message = String.format("Character '%s' was successfully created in the '%s' franchise.\n", asset, "Marvel");
+            return ResponseEntity.status(HttpStatus.CREATED).body(message);
+        } else {
+            message = "Cannot add asset to unknown franchise.\n";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+        }
     }
 
-    @PostMapping
-    public String createAsset(@RequestBody String name){
-        return "Asset " + name + " created.";
+    @PutMapping("/{domain}")
+    public String updateAsset(@PathVariable String domain, @RequestBody List<String> data) {
+
+        String oldName = data.get(0);
+        String newName = data.get(1);
+
+        List<String> characters = null;
+
+        if (domain.equalsIgnoreCase("starwars")) {
+        characters = StarWars.getCharacters();
+        } else if (domain.equalsIgnoreCase("marvel")) {
+        characters = Marvel.getCharacters();
+        } else {
+            return "Franchise not found.";
+        }
+
+        int index = characters.indexOf(oldName);
+        if (index == -1) {
+            return oldName + " was not found in " + domain + " franchise.";
+        }
+
+        characters.set(index, newName);
+        return oldName + " was successfully updated to " + newName + " in the " + domain + " franchise.";
     }
 
-    @PutMapping("/{name}")
-    public String updateAsset(@PathVariable String name, @RequestBody String newName){
-        return "Asset " + name + " updated to " + newName;
-    }
 }
+
 ```
 
 In this code we are mapping the method updateAsset to the PUT HTTP verb when the resouce /assets/{assetname} is requested.
@@ -57,14 +109,17 @@ We may test the HTTP PUT Method implemented using the curl app.
 In the terminal of the wsl execute the command:
 
 ```bash
-curl --header "Content-Type: application/text" --request PUT --data 'Asset due' http://localhost:8080/assets/asset%20two
- 
+curl --header "Content-Type: application/json" \
+     --request PUT \
+     --data '["Anakin Skywalker", "Darth Vader"]' \
+     http://localhost:8080/franchises/starwars
+
 ```
 
 The response will be:
 
 ```bash
-Asset asset two updated to Asset duo.
+Anakin Skywalker was successfully updated to Darth Vader in the starwars franchise.
 ```
 
 If you want to try, you can compile and run the following java class:
