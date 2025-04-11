@@ -25,7 +25,7 @@ src/main/java/br/mackenzie/mackleaps/api/controller/FranchisesController.java
 with the following content:
 
 ```java
-package br.mackenzie.mackleaps.api.controlle;
+package br.mackenzie.mackleaps.api.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
