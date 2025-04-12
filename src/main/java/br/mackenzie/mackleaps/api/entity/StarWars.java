@@ -31,4 +31,14 @@ public class StarWars {
     public static void addCharacter(String character) {
         characters.add(character);
     }
+
+    public static boolean updateCharacter(String oldName, String newName) {
+        int index = characters.indexOf(oldName);
+        if (index != -1) {
+            characters.set(index, newName);
+            return true;
+        }
+        return false;
+    }
+    
 }

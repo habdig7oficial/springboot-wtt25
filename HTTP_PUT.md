@@ -26,42 +26,34 @@ src/main/java/br/mackenzie/mackleaps/assetapi/FranchisesController.java
 ```
 
 ```java
-@PutMapping("/{domain}")
-public ResponseEntity<String> updateAsset(
-        @PathVariable String domain,
-        @RequestBody List<String> data) {
+    @PutMapping("/{domain}")
+    public ResponseEntity<String> updateAsset(
+            @PathVariable String domain,
+            @RequestBody List<String> data) {
 
-    String oldName = data.get(0);
-    String newName = data.get(1);
-    List<String> characters;
+        String oldName = data.get(0);
+        String newName = data.get(1);
+        boolean updated = false;
 
-    if ("starwars".equalsIgnoreCase(domain)) {
-        characters = StarWars.getCharacters();
-    } else if ("marvel".equalsIgnoreCase(domain)) {
-        characters = Marvel.getCharacters();
-    } else {
+        if ("starwars".equalsIgnoreCase(domain)) {
+            updated = StarWars.updateCharacter(oldName, newName);
+        } else if ("marvel".equalsIgnoreCase(domain)) {
+            updated = Marvel.updateCharacter(oldName, newName);
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Franchise not found.");
+        }
+
+        if (!updated) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(String.format("Character '%s' not found.", oldName));
+        }
+
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body("Franchise not found.");
+                .ok(String.format("Character '%s' updated to '%s'.", oldName, newName));
     }
-
-    int index = characters.indexOf(oldName);
-    if (index == -1) {
-        String msg = String.format(
-            "Character '%s' was not found in the '%s' franchise.",
-            oldName, domain);
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(msg);
-    }
-
-    characters.set(index, newName);
-    String msg = String.format(
-        "Character '%s' was successfully updated to '%s' in the '%s' franchise.",
-        oldName, newName, domain);
-    return ResponseEntity
-            .ok(msg);
-}
 ```
 
 This method maps `PUT /franchises/{domain}`, reads a JSON array containing two elements (`[oldName, newName]`), updates the specified character, and returns a message indicating success or failure.

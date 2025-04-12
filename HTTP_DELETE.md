@@ -27,24 +27,24 @@ src/main/java/br/mackenzie/mackleaps/assetapi/FranchisesController.java
 ```
 
 ```java
-@DeleteMapping("/{domain}")
-public String deleteCharacter(@PathVariable String domain, @RequestBody String character) {
-    List<String> characters;
+    @DeleteMapping("/{domain}")
+    public String deleteCharacter(@PathVariable String domain, @RequestBody String character) {
+        List<String> characters;
 
-    if ("starwars".equalsIgnoreCase(domain)) {
-        characters = StarWars.getCharacters();
-    } else if ("marvel".equalsIgnoreCase(domain)) {
-        characters = Marvel.getCharacters();
-    } else {
-        return "Franchise not found.";
-    }
+        if ("starwars".equalsIgnoreCase(domain)) {
+            characters = StarWars.getCharacters();
+        } else if ("marvel".equalsIgnoreCase(domain)) {
+            characters = Marvel.getCharacters();
+        } else {
+            return "Franchise not found.";
+        }
 
-    if (characters.remove(character)) {
-        return String.format("Character '%s' was successfully removed from the '%s' franchise.", character, domain);
-    } else {
-        return String.format("Character '%s' was not found in the '%s' franchise.", character, domain);
+        if (characters.remove(character)) {
+            return String.format("Character '%s' was successfully removed from the '%s' franchise.", character, domain);
+        } else {
+            return String.format("Character '%s' was not found in the '%s' franchise.", character, domain);
+        }
     }
-}
 ```
 
 This method handles the `DELETE` request mapped to `/franchises/{domain}` and removes the given character from the respective franchise. It returns a message indicating whether the deletion was successful or not.

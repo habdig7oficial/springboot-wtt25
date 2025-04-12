@@ -26,35 +26,35 @@ src/main/java/br/mackenzie/mackleaps/assetapi/FranchisesController.java
 ```
 
 ```java
-@PostMapping("/{domain}")
-public ResponseEntity<String> addAsset(
-        @PathVariable String domain,
-        @RequestBody String asset) {
+    @PostMapping("/{domain}")
+    public ResponseEntity<String> addAsset(
+            @PathVariable String domain,
+            @RequestBody String asset) {
 
-    String message;
-    if ("starwars".equalsIgnoreCase(domain)) {
-        StarWars.addCharacter(asset);
-        message = String.format(
-            "Character '%s' was successfully created in the '%s' franchise.",
-            asset, "Star Wars");
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(message);
-    } else if ("marvel".equalsIgnoreCase(domain)) {
-        Marvel.addCharacter(asset);
-        message = String.format(
-            "Character '%s' was successfully created in the '%s' franchise.",
-            asset, "Marvel");
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(message);
-    } else {
-        message = "Cannot add asset to unknown franchise.";
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(message);
+        String message;
+        if ("starwars".equalsIgnoreCase(domain)) {
+            StarWars.addCharacter(asset);
+            message = String.format(
+                "Character '%s' was successfully created in the '%s' franchise.",
+                asset, "Star Wars");
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(message);
+        } else if ("marvel".equalsIgnoreCase(domain)) {
+            Marvel.addCharacter(asset);
+            message = String.format(
+                "Character '%s' was successfully created in the '%s' franchise.",
+                asset, "Marvel");
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(message);
+        } else {
+            message = "Cannot add asset to unknown franchise.";
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(message);
+        }
     }
-}
 ```
 
 This method maps `POST /franchises/{domain}`, reads the request body as a plain-text asset name, adds it to the appropriate franchise list, and returns a `201 Created` response (or `400 Bad Request` if the franchise is unknown).
