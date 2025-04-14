@@ -1,1 +1,4 @@
+br/mackenzie/mackleaps/api/entity/Marvel.class
 br/mackenzie/mackleaps/api/ApiApplication.class
+br/mackenzie/mackleaps/api/controller/FranchisesController.class
+br/mackenzie/mackleaps/api/entity/StarWars.class
