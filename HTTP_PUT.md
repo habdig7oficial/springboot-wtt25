@@ -77,7 +77,7 @@ You can test the `PUT` method using `curl`. Execute this command in your termina
 ```bash
 curl --header "Content-Type: application/json" \
      --request PUT \
-     --data '["Anakin Skywalker","Darth Vader"]' \
+     --data '["Lorem","Ipsum"]' \
      http://localhost:8080/franchises/starwars
 ```
 
