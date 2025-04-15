@@ -1,4 +1,5 @@
-/home/marcos/projetos/rest-api/src/main/java/br/mackenzie/mackleaps/api/ApiApplication.java
-/home/marcos/projetos/rest-api/src/main/java/br/mackenzie/mackleaps/api/controller/FranchisesController.java
-/home/marcos/projetos/rest-api/src/main/java/br/mackenzie/mackleaps/api/entity/Marvel.java
-/home/marcos/projetos/rest-api/src/main/java/br/mackenzie/mackleaps/api/entity/StarWars.java
+/home/marcos/projetos/spring_rest-api_wtt25/src/main/java/br/mackenzie/mackleaps/api/ApiApplication.java
+/home/marcos/projetos/spring_rest-api_wtt25/src/main/java/br/mackenzie/mackleaps/api/controller/FranchisesController.java
+/home/marcos/projetos/spring_rest-api_wtt25/src/main/java/br/mackenzie/mackleaps/api/controller/Index.java
+/home/marcos/projetos/spring_rest-api_wtt25/src/main/java/br/mackenzie/mackleaps/api/entity/Marvel.java
+/home/marcos/projetos/spring_rest-api_wtt25/src/main/java/br/mackenzie/mackleaps/api/entity/StarWars.java
